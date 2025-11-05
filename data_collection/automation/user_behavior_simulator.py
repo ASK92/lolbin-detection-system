@@ -33,6 +33,9 @@ class UserBehaviorSimulator:
         self.start_time = datetime.now()
         self.end_time = self.start_time + timedelta(hours=duration_hours)
         self.activities = []
+        self.activity_count = 0
+        self.error_count = 0
+        self.max_errors = 100  # Maximum consecutive errors before stopping
         
     def run(self):
         """Run the simulation"""
@@ -43,30 +46,54 @@ class UserBehaviorSimulator:
             try:
                 # Select random activity
                 activity = self._select_activity()
-                logger.info(f"Executing: {activity['name']}")
+                self.activity_count += 1
+                
+                # Log progress every 100 activities
+                if self.activity_count % 100 == 0:
+                    elapsed = datetime.now() - self.start_time
+                    remaining = self.end_time - datetime.now()
+                    logger.info(f"Progress: {self.activity_count} activities completed | "
+                              f"Elapsed: {elapsed} | Remaining: {remaining}")
+                
+                logger.info(f"Activity #{self.activity_count}: {activity['name']}")
                 
                 # Execute activity
                 activity['func']()
                 
+                # Reset error count on success
+                self.error_count = 0
+                
                 # Log activity
                 self.activities.append({
                     'timestamp': datetime.now().isoformat(),
-                    'activity': activity['name']
+                    'activity': activity['name'],
+                    'activity_number': self.activity_count
                 })
+                
+                # Save progress every 500 activities (for long runs)
+                if self.activity_count % 500 == 0:
+                    self._save_activity_log()
                 
                 # Wait before next activity
                 wait_time = random.randint(
                     self.activity_interval // 2,
                     self.activity_interval * 2
                 )
-                logger.info(f"Waiting {wait_time} seconds before next activity")
+                logger.debug(f"Waiting {wait_time} seconds before next activity")
                 time.sleep(wait_time)
                 
             except KeyboardInterrupt:
                 logger.info("Simulation interrupted by user")
                 break
             except Exception as e:
-                logger.error(f"Error executing activity: {e}")
+                self.error_count += 1
+                logger.error(f"Error executing activity ({self.error_count}/{self.max_errors}): {e}")
+                
+                # Stop if too many consecutive errors
+                if self.error_count >= self.max_errors:
+                    logger.error(f"Too many consecutive errors ({self.error_count}). Stopping simulation.")
+                    break
+                
                 time.sleep(30)
         
         logger.info("Simulation completed")
@@ -358,15 +385,22 @@ class UserBehaviorSimulator:
     
     def _save_activity_log(self):
         """Save activity log"""
-        log_file = f"activity_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        log_file = f"activity_log_{self.start_time.strftime('%Y%m%d_%H%M%S')}.json"
         
         try:
             import json
+            log_data = {
+                'start_time': self.start_time.isoformat(),
+                'end_time': datetime.now().isoformat(),
+                'total_activities': self.activity_count,
+                'duration_hours': self.duration_hours,
+                'activities': self.activities
+            }
             with open(log_file, 'w') as f:
-                json.dump(self.activities, f, indent=2)
-            logger.info(f"Activity log saved to {log_file}")
-        except:
-            pass
+                json.dump(log_data, f, indent=2)
+            logger.info(f"Activity log saved to {log_file} ({len(self.activities)} activities)")
+        except Exception as e:
+            logger.error(f"Failed to save activity log: {e}")
 
 
 def main():
@@ -375,14 +409,26 @@ def main():
     
     parser = argparse.ArgumentParser(description='Windows User Behavior Simulator')
     parser.add_argument('--duration', type=int, default=24, 
-                       help='Duration in hours (default: 24)')
+                       help='Duration in hours (default: 24). Use 120 for 5 days.')
     parser.add_argument('--interval', type=int, default=60,
                        help='Activity interval in seconds (default: 60)')
+    parser.add_argument('--days', type=int, default=None,
+                       help='Duration in days (alternative to --duration). Use 5 for 5 days.')
     
     args = parser.parse_args()
     
+    # Calculate duration
+    if args.days:
+        duration_hours = args.days * 24
+    else:
+        duration_hours = args.duration
+    
+    logger.info(f"Starting simulation for {duration_hours} hours ({duration_hours/24:.1f} days)")
+    logger.info(f"Activity interval: {args.interval} seconds")
+    logger.info(f"Estimated activities: ~{duration_hours * 3600 / args.interval}")
+    
     simulator = UserBehaviorSimulator(
-        duration_hours=args.duration,
+        duration_hours=duration_hours,
         activity_interval=args.interval
     )
     
@@ -391,5 +437,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 

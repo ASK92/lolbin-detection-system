@@ -219,3 +219,4 @@ Write-Host "5. Monitor logs:" -ForegroundColor White
 Write-Host "   Get-Content $AutomationPath\user_behavior.log -Tail 50 -Wait" -ForegroundColor Gray
 Write-Host ""
 
+

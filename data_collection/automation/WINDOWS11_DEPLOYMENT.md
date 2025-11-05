@@ -213,22 +213,37 @@ Test-Path "C:\Program Files\Google\Chrome\Application\chrome.exe"
 
 ```powershell
 cd C:\Automation
+
+# Run for 24 hours
 python user_behavior_simulator.py --duration 24 --interval 60
+
+# Run for 5 days (120 hours) - RECOMMENDED for immediate dataset
+python user_behavior_simulator.py --days 5 --interval 60
+
+# Or use the convenience script
+.\run_5days.ps1
 ```
 
-**To run in background:**
+**To run in background for 5 days:**
 ```powershell
-Start-Process python.exe -ArgumentList "C:\Automation\user_behavior_simulator.py --duration 24 --interval 60" -WindowStyle Hidden
+Start-Process python.exe -ArgumentList "C:\Automation\user_behavior_simulator.py --days 5 --interval 60" -WindowStyle Hidden
 ```
 
 ### Option 2: Create Scheduled Task (Recommended)
 
 ```powershell
 # Run as Administrator
+# For 5-day continuous run:
 $Action = New-ScheduledTaskAction `
     -Execute "python.exe" `
-    -Argument "C:\Automation\user_behavior_simulator.py --duration 24 --interval 60" `
+    -Argument "C:\Automation\user_behavior_simulator.py --days 5 --interval 60" `
     -WorkingDirectory "C:\Automation"
+
+# For 24-hour run:
+# $Action = New-ScheduledTaskAction `
+#     -Execute "python.exe" `
+#     -Argument "C:\Automation\user_behavior_simulator.py --duration 24 --interval 60" `
+#     -WorkingDirectory "C:\Automation"
 
 $Trigger = New-ScheduledTaskTrigger -Daily -At 9AM
 $Trigger.Repetition = New-ScheduledTaskRepetition -Interval (New-TimeSpan -Hours 1) -Duration (New-TimeSpan -Days 7)
