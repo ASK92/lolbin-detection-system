@@ -79,4 +79,4 @@ pip install pyautogui python-dotenv psutil requests beautifulsoup4 schedule fake
 ```
 
 The automation will still work, but web browsing features will be disabled.
-
+python -c "import selenium;"
