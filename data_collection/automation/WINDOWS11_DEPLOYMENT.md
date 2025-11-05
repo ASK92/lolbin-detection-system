@@ -149,7 +149,7 @@ Start-Process "$env:USERPROFILE\Downloads\git-installer.exe" -ArgumentList "/SIL
 ```powershell
 # On Windows 11 VM
 cd C:\
-git clone <your-repository-url> Automation
+git clone https://github.com/ASK92/lolbin-detection-system.git Automation
 cd Automation\data_collection\automation
 ```
 
