@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:14-alpine
+    container_name: lolbin-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lolbin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-lolbin_password}
+      POSTGRES_DB: ${POSTGRES_DB:-lolbin_detection}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lolbin}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lolbin-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lolbin-backend
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-lolbin}:${POSTGRES_PASSWORD:-lolbin_password}@db:5432/${POSTGRES_DB:-lolbin_detection}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4-turbo-preview}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST:-}
+      - EMAIL_SMTP_PORT=${EMAIL_SMTP_PORT:-587}
+      - EMAIL_FROM=${EMAIL_FROM:-}
+      - EMAIL_TO=${EMAIL_TO:-}
+      - EMAIL_USERNAME=${EMAIL_USERNAME:-}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD:-}
+      - DETECTION_THRESHOLD=${DETECTION_THRESHOLD:-0.7}
+      - ALERT_THRESHOLD=${ALERT_THRESHOLD:-0.9}
+      - RANDOM_FOREST_MODEL_PATH=${RANDOM_FOREST_MODEL_PATH:-data/models/random_forest_model.pkl}
+      - LSTM_MODEL_PATH=${LSTM_MODEL_PATH:-data/models/lstm_model.pth}
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FILE=logs/app.log
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - lolbin-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Dashboard
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: lolbin-frontend
+    environment:
+      - BACKEND_URL=http://backend:8000
+    volumes:
+      - ./.streamlit:/.streamlit
+    ports:
+      - "8501:8501"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - lolbin-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8501/_stcore/health').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
+
+networks:
+  lolbin-network:
+    driver: bridge
+
+
+

@@ -1,0 +1,21 @@
+# Example override file for local development
+# Copy this to docker-compose.override.yml and customize as needed
+
+version: '3.8'
+
+services:
+  backend:
+    volumes:
+      - ./app:/app/app
+      - ./scripts:/app/scripts
+    environment:
+      - LOG_LEVEL=DEBUG
+
+  frontend:
+    volumes:
+      - ./app/frontend:/app/frontend
+    environment:
+      - BACKEND_URL=http://localhost:8000
+
+
+

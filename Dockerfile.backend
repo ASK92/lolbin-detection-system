@@ -1,0 +1,42 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY app/ ./app/
+COPY scripts/ ./scripts/
+COPY collectors/ ./collectors/
+
+# Create necessary directories
+RUN mkdir -p data/models data/raw data/processed logs
+
+# Copy entrypoint script
+COPY docker/entrypoint_backend.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set PYTHONPATH
+ENV PYTHONPATH=/app
+
+# Expose API port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health').raise_for_status()" || exit 1
+
+# Use entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+

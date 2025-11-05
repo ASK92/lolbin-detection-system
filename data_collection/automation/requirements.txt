@@ -1,0 +1,12 @@
+selenium==4.15.2
+webdriver-manager==4.0.1
+pyautogui==0.9.54
+python-dotenv==1.0.1
+psutil==5.9.6
+pywin32==306
+requests==2.31.0
+beautifulsoup4==4.12.2
+schedule==1.2.0
+faker==20.1.0
+
+
