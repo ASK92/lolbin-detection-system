@@ -123,71 +123,110 @@ class UserBehaviorSimulator:
         
         return activities[0]
     
+    def _check_chrome_installed(self):
+        """Check if Chrome is installed"""
+        chrome_paths = [
+            'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+            'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+            os.path.expanduser('~\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe')
+        ]
+        return any(os.path.exists(path) for path in chrome_paths)
+    
     def _browse_web(self):
         """Simulate web browsing"""
+        # Check if Chrome is installed
+        chrome_paths = [
+            'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+            'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+            os.path.expanduser('~\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe')
+        ]
+        chrome_installed = any(os.path.exists(path) for path in chrome_paths)
+        
+        # Try Selenium with Chrome if available
+        if chrome_installed:
+            try:
+                from selenium import webdriver
+                from selenium.webdriver.common.by import By
+                from selenium.webdriver.common.keys import Keys
+                from selenium.webdriver.chrome.service import Service
+                from webdriver_manager.chrome import ChromeDriverManager
+                
+                options = webdriver.ChromeOptions()
+                options.add_argument('--start-maximized')
+                options.add_argument('--disable-blink-features=AutomationControlled')
+                options.add_experimental_option("excludeSwitches", ["enable-automation"])
+                options.add_experimental_option('useAutomationExtension', False)
+                
+                driver = webdriver.Chrome(
+                    service=Service(ChromeDriverManager().install()),
+                    options=options
+                )
+                
+                # Visit common websites
+                sites = [
+                    'https://www.google.com',
+                    'https://www.github.com',
+                    'https://www.stackoverflow.com',
+                    'https://www.microsoft.com',
+                    'https://www.reddit.com',
+                    'https://news.ycombinator.com'
+                ]
+                
+                site = random.choice(sites)
+                logger.info(f"Browsing to {site} (Chrome)")
+                driver.get(site)
+                
+                # Simulate reading time
+                time.sleep(random.randint(5, 15))
+                
+                # Scroll
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight/2);")
+                time.sleep(2)
+                
+                # Search on Google
+                if 'google' in driver.current_url.lower():
+                    try:
+                        search_box = driver.find_element(By.NAME, 'q')
+                        search_terms = ['python', 'machine learning', 'cybersecurity', 'windows']
+                        search_box.send_keys(random.choice(search_terms))
+                        search_box.send_keys(Keys.RETURN)
+                        time.sleep(random.randint(3, 8))
+                    except:
+                        pass
+                
+                driver.quit()
+                return
+                
+            except ImportError:
+                logger.debug("Selenium not available, falling back to PowerShell")
+            except Exception as e:
+                logger.debug(f"Chrome/Selenium failed: {e}, falling back to PowerShell")
+        
+        # Fallback to PowerShell/Edge (default browser)
+        logger.info("Using default browser (PowerShell)")
+        sites = [
+            'https://www.google.com',
+            'https://www.github.com',
+            'https://www.microsoft.com',
+            'https://www.stackoverflow.com'
+        ]
+        site = random.choice(sites)
         try:
-            from selenium import webdriver
-            from selenium.webdriver.common.by import By
-            from selenium.webdriver.common.keys import Keys
-            from selenium.webdriver.chrome.service import Service
-            from webdriver_manager.chrome import ChromeDriverManager
-            
-            options = webdriver.ChromeOptions()
-            options.add_argument('--start-maximized')
-            options.add_argument('--disable-blink-features=AutomationControlled')
-            options.add_experimental_option("excludeSwitches", ["enable-automation"])
-            options.add_experimental_option('useAutomationExtension', False)
-            
-            driver = webdriver.Chrome(
-                service=Service(ChromeDriverManager().install()),
-                options=options
-            )
-            
-            # Visit common websites
-            sites = [
-                'https://www.google.com',
-                'https://www.github.com',
-                'https://www.stackoverflow.com',
-                'https://www.microsoft.com',
-                'https://www.reddit.com',
-                'https://news.ycombinator.com'
-            ]
-            
-            site = random.choice(sites)
-            logger.info(f"Browsing to {site}")
-            driver.get(site)
-            
-            # Simulate reading time
-            time.sleep(random.randint(5, 15))
-            
-            # Scroll
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight/2);")
-            time.sleep(2)
-            
-            # Search on Google
-            if 'google' in driver.current_url.lower():
-                try:
-                    search_box = driver.find_element(By.NAME, 'q')
-                    search_terms = ['python', 'machine learning', 'cybersecurity', 'windows']
-                    search_box.send_keys(random.choice(search_terms))
-                    search_box.send_keys(Keys.RETURN)
-                    time.sleep(random.randint(3, 8))
-                except:
-                    pass
-            
-            driver.quit()
-            
-        except ImportError:
-            logger.warning("Selenium not available, using PowerShell for web browsing")
-            sites = [
-                'https://www.google.com',
-                'https://www.github.com',
-                'https://www.microsoft.com'
-            ]
-            site = random.choice(sites)
+            # Use PowerShell to open default browser
             subprocess.run(['powershell', '-Command', f'Start-Process "{site}"'], 
                          timeout=30, check=False)
             time.sleep(random.randint(5, 10))
+            
+            # Try to close browser after delay (optional)
+            time.sleep(5)
+            try:
+                subprocess.run(['powershell', '-Command', 
+                              'Get-Process msedge,chrome,firefox -ErrorAction SilentlyContinue | Stop-Process -Force'], 
+                             check=False, timeout=5)
+            except:
+                pass
+        except Exception as e:
+            logger.debug(f"Browser fallback failed: {e}")
     
     def _file_operations(self):
         """Simulate file operations"""
@@ -264,12 +303,38 @@ class UserBehaviorSimulator:
     
     def _open_office_app(self):
         """Open Office applications"""
-        apps = [
-            ('notepad', 'notepad.exe'),
-            ('calculator', 'calc.exe'),
-            ('paint', 'mspaint.exe'),
-            ('wordpad', 'wordpad.exe')
+        apps = []
+        
+        # Check which apps are available
+        if self._check_app_exists('notepad.exe'):
+            apps.append(('notepad', 'notepad.exe'))
+        
+        # Check for Calculator in different locations
+        calc_paths = [
+            'calc.exe',
+            'C:\\Windows\\System32\\calc.exe',
+            'C:\\Windows\\System32\\CalculatorApp.exe'
         ]
+        calc_path = self._find_app(calc_paths)
+        if calc_path:
+            apps.append(('calculator', calc_path))
+        
+        if self._check_app_exists('mspaint.exe'):
+            apps.append(('paint', 'mspaint.exe'))
+        
+        if self._check_app_exists('wordpad.exe'):
+            apps.append(('wordpad', 'wordpad.exe'))
+        
+        # If no apps available, use PowerShell to open Calculator
+        if not apps:
+            logger.info("No standard apps found, using PowerShell Calculator")
+            try:
+                subprocess.run(['powershell', '-Command', 'Start-Process Calculator'], 
+                             check=False, timeout=5)
+                time.sleep(random.randint(2, 5))
+            except:
+                pass
+            return
         
         app_name, app_path = random.choice(apps)
         logger.info(f"Opening {app_name}")
@@ -279,10 +344,51 @@ class UserBehaviorSimulator:
             time.sleep(random.randint(2, 5))
             
             # Close after a bit
-            subprocess.run(['taskkill', '/F', '/IM', os.path.basename(app_path)], 
+            process_name = os.path.basename(app_path)
+            if process_name == 'calc.exe':
+                process_name = 'Calculator.exe'
+            subprocess.run(['taskkill', '/F', '/IM', process_name], 
                          check=False, timeout=5)
+        except Exception as e:
+            logger.debug(f"Could not open {app_name}: {e}")
+    
+    def _check_app_exists(self, app_name):
+        """Check if an application exists in PATH or common locations"""
+        try:
+            # Check in PATH
+            result = subprocess.run(['where', app_name], 
+                                  capture_output=True, timeout=5, check=False)
+            if result.returncode == 0:
+                return True
+            
+            # Check common system paths
+            system_paths = [
+                'C:\\Windows\\System32',
+                'C:\\Windows',
+                'C:\\Windows\\SystemApps'
+            ]
+            for path in system_paths:
+                full_path = os.path.join(path, app_name)
+                if os.path.exists(full_path):
+                    return True
+            return False
         except:
-            pass
+            return False
+    
+    def _find_app(self, paths):
+        """Find first available app from list of paths"""
+        for path in paths:
+            try:
+                if os.path.exists(path):
+                    return path
+                # Try in PATH
+                result = subprocess.run(['where', path], 
+                                      capture_output=True, timeout=5, check=False)
+                if result.returncode == 0:
+                    return path
+            except:
+                continue
+        return None
     
     def _system_commands(self):
         """Run benign system commands"""
