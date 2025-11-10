@@ -212,7 +212,8 @@ if ($evtxFiles) {
 } else {
     Write-Host "  ⚠ No exported EVTX files found" -ForegroundColor Yellow
     Write-Host "    You may need to export Sysmon logs manually:" -ForegroundColor Yellow
-    Write-Host "    wevtutil epl `"Microsoft-Windows-Sysmon/Operational`" `"$SysmonLogPath\SysmonLogs_$(Get-Date -Format 'yyyyMMdd').evtx`"" -ForegroundColor Gray
+    $exportCmd = "wevtutil epl `"Microsoft-Windows-Sysmon/Operational`" `"$SysmonLogPath\SysmonLogs_$(Get-Date -Format 'yyyyMMdd').evtx`""
+    Write-Host "    $exportCmd" -ForegroundColor Gray
 }
 
 Write-Host ""
@@ -227,8 +228,10 @@ if ($allChecksPassed) {
     Write-Host "✓ All critical checks passed!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Your dataset appears to be complete. Next steps:" -ForegroundColor Cyan
-    Write-Host "1. Export Sysmon logs: wevtutil epl `"Microsoft-Windows-Sysmon/Operational`" `"C:\SysmonLogs\SysmonLogs_Final.evtx`"" -ForegroundColor White
-    Write-Host "2. Export PowerShell logs: wevtutil epl `"Microsoft-Windows-PowerShell/Operational`" `"C:\SysmonLogs\PowerShellLogs_Final.evtx`"" -ForegroundColor White
+    $sysmonExport = "wevtutil epl `"Microsoft-Windows-Sysmon/Operational`" `"C:\SysmonLogs\SysmonLogs_Final.evtx`""
+    $psExport = "wevtutil epl `"Microsoft-Windows-PowerShell/Operational`" `"C:\SysmonLogs\PowerShellLogs_Final.evtx`""
+    Write-Host "1. Export Sysmon logs: $sysmonExport" -ForegroundColor White
+    Write-Host "2. Export PowerShell logs: $psExport" -ForegroundColor White
     Write-Host "3. Process the data using: python scripts/process_evtx_files.py" -ForegroundColor White
 } else {
     Write-Host "⚠ Some checks failed or warnings were found" -ForegroundColor Yellow
