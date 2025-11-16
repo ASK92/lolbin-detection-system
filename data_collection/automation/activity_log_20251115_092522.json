@@ -1,0 +1,263 @@
+{
+  "start_time": "2025-11-15T09:25:22.166514",
+  "end_time": "2025-11-15T10:32:41.109171",
+  "total_activities": 51,
+  "duration_hours": 24,
+  "activities": [
+    {
+      "timestamp": "2025-11-15T09:25:24.069371",
+      "activity": "System Commands",
+      "activity_number": 1
+    },
+    {
+      "timestamp": "2025-11-15T09:26:04.073452",
+      "activity": "Read Documents",
+      "activity_number": 2
+    },
+    {
+      "timestamp": "2025-11-15T09:26:47.839771",
+      "activity": "Open Office App",
+      "activity_number": 3
+    },
+    {
+      "timestamp": "2025-11-15T09:28:44.993980",
+      "activity": "Browse Web",
+      "activity_number": 4
+    },
+    {
+      "timestamp": "2025-11-15T09:30:34.296005",
+      "activity": "Browse Web",
+      "activity_number": 5
+    },
+    {
+      "timestamp": "2025-11-15T09:32:18.432118",
+      "activity": "File Operations",
+      "activity_number": 6
+    },
+    {
+      "timestamp": "2025-11-15T09:33:17.943758",
+      "activity": "Browse Web",
+      "activity_number": 7
+    },
+    {
+      "timestamp": "2025-11-15T09:33:55.948630",
+      "activity": "Read Documents",
+      "activity_number": 8
+    },
+    {
+      "timestamp": "2025-11-15T09:35:03.185212",
+      "activity": "Browse Web",
+      "activity_number": 9
+    },
+    {
+      "timestamp": "2025-11-15T09:36:31.195336",
+      "activity": "File Operations",
+      "activity_number": 10
+    },
+    {
+      "timestamp": "2025-11-15T09:37:53.198692",
+      "activity": "Read Documents",
+      "activity_number": 11
+    },
+    {
+      "timestamp": "2025-11-15T09:39:46.786074",
+      "activity": "PowerShell Activity",
+      "activity_number": 12
+    },
+    {
+      "timestamp": "2025-11-15T09:41:35.666094",
+      "activity": "Browse Web",
+      "activity_number": 13
+    },
+    {
+      "timestamp": "2025-11-15T09:43:32.100669",
+      "activity": "Open Office App",
+      "activity_number": 14
+    },
+    {
+      "timestamp": "2025-11-15T09:44:07.153350",
+      "activity": "File Operations",
+      "activity_number": 15
+    },
+    {
+      "timestamp": "2025-11-15T09:44:41.497609",
+      "activity": "Open Office App",
+      "activity_number": 16
+    },
+    {
+      "timestamp": "2025-11-15T09:46:17.208952",
+      "activity": "Browse Web",
+      "activity_number": 17
+    },
+    {
+      "timestamp": "2025-11-15T09:47:58.881207",
+      "activity": "Browse Web",
+      "activity_number": 18
+    },
+    {
+      "timestamp": "2025-11-15T09:48:57.905153",
+      "activity": "File Operations",
+      "activity_number": 19
+    },
+    {
+      "timestamp": "2025-11-15T09:49:52.413941",
+      "activity": "PowerShell Activity",
+      "activity_number": 20
+    },
+    {
+      "timestamp": "2025-11-15T09:51:05.966620",
+      "activity": "Browse Web",
+      "activity_number": 21
+    },
+    {
+      "timestamp": "2025-11-15T09:52:41.378426",
+      "activity": "System Commands",
+      "activity_number": 22
+    },
+    {
+      "timestamp": "2025-11-15T09:54:30.381780",
+      "activity": "File Operations",
+      "activity_number": 23
+    },
+    {
+      "timestamp": "2025-11-15T09:55:10.384089",
+      "activity": "File Operations",
+      "activity_number": 24
+    },
+    {
+      "timestamp": "2025-11-15T09:56:16.916721",
+      "activity": "Browse Web",
+      "activity_number": 25
+    },
+    {
+      "timestamp": "2025-11-15T09:56:54.328681",
+      "activity": "Open Office App",
+      "activity_number": 26
+    },
+    {
+      "timestamp": "2025-11-15T09:58:14.815603",
+      "activity": "Browse Web",
+      "activity_number": 27
+    },
+    {
+      "timestamp": "2025-11-15T09:59:49.816304",
+      "activity": "Read Documents",
+      "activity_number": 28
+    },
+    {
+      "timestamp": "2025-11-15T10:00:41.819735",
+      "activity": "File Operations",
+      "activity_number": 29
+    },
+    {
+      "timestamp": "2025-11-15T10:01:59.655819",
+      "activity": "Browse Web",
+      "activity_number": 30
+    },
+    {
+      "timestamp": "2025-11-15T10:02:50.061421",
+      "activity": "Open Office App",
+      "activity_number": 31
+    },
+    {
+      "timestamp": "2025-11-15T10:03:46.065831",
+      "activity": "File Operations",
+      "activity_number": 32
+    },
+    {
+      "timestamp": "2025-11-15T10:04:57.413846",
+      "activity": "System Commands",
+      "activity_number": 33
+    },
+    {
+      "timestamp": "2025-11-15T10:06:36.416166",
+      "activity": "System Commands",
+      "activity_number": 34
+    },
+    {
+      "timestamp": "2025-11-15T10:08:05.449177",
+      "activity": "Browse Web",
+      "activity_number": 35
+    },
+    {
+      "timestamp": "2025-11-15T10:08:53.463655",
+      "activity": "File Operations",
+      "activity_number": 36
+    },
+    {
+      "timestamp": "2025-11-15T10:10:25.478980",
+      "activity": "File Operations",
+      "activity_number": 37
+    },
+    {
+      "timestamp": "2025-11-15T10:11:39.484283",
+      "activity": "File Operations",
+      "activity_number": 38
+    },
+    {
+      "timestamp": "2025-11-15T10:13:32.493192",
+      "activity": "File Operations",
+      "activity_number": 39
+    },
+    {
+      "timestamp": "2025-11-15T10:14:44.515800",
+      "activity": "Browse Web",
+      "activity_number": 40
+    },
+    {
+      "timestamp": "2025-11-15T10:16:34.956427",
+      "activity": "Browse Web",
+      "activity_number": 41
+    },
+    {
+      "timestamp": "2025-11-15T10:18:20.607420",
+      "activity": "Background Tasks",
+      "activity_number": 42
+    },
+    {
+      "timestamp": "2025-11-15T10:19:40.634886",
+      "activity": "System Commands",
+      "activity_number": 43
+    },
+    {
+      "timestamp": "2025-11-15T10:21:23.663164",
+      "activity": "File Operations",
+      "activity_number": 44
+    },
+    {
+      "timestamp": "2025-11-15T10:22:25.682738",
+      "activity": "File Operations",
+      "activity_number": 45
+    },
+    {
+      "timestamp": "2025-11-15T10:24:08.793555",
+      "activity": "Background Tasks",
+      "activity_number": 46
+    },
+    {
+      "timestamp": "2025-11-15T10:24:52.806899",
+      "activity": "File Operations",
+      "activity_number": 47
+    },
+    {
+      "timestamp": "2025-11-15T10:26:21.415062",
+      "activity": "PowerShell Activity",
+      "activity_number": 48
+    },
+    {
+      "timestamp": "2025-11-15T10:27:45.666692",
+      "activity": "Browse Web",
+      "activity_number": 49
+    },
+    {
+      "timestamp": "2025-11-15T10:29:04.714600",
+      "activity": "File Operations",
+      "activity_number": 50
+    },
+    {
+      "timestamp": "2025-11-15T10:31:23.373480",
+      "activity": "Browse Web",
+      "activity_number": 51
+    }
+  ]
+}

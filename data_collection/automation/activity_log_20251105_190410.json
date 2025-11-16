@@ -1,0 +1,28 @@
+{
+  "start_time": "2025-11-05T19:04:10.220449",
+  "end_time": "2025-11-05T19:09:44.983077",
+  "total_activities": 5,
+  "duration_hours": 120,
+  "activities": [
+    {
+      "timestamp": "2025-11-05T19:04:13.352689",
+      "activity": "Open Office App",
+      "activity_number": 1
+    },
+    {
+      "timestamp": "2025-11-05T19:06:36.241535",
+      "activity": "Read Documents",
+      "activity_number": 3
+    },
+    {
+      "timestamp": "2025-11-05T19:07:58.427722",
+      "activity": "Open Office App",
+      "activity_number": 4
+    },
+    {
+      "timestamp": "2025-11-05T19:08:35.540242",
+      "activity": "Open Office App",
+      "activity_number": 5
+    }
+  ]
+}
