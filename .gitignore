@@ -55,6 +55,17 @@ data/models/*.pkl
 data/models/*.pth
 data/models/*.joblib
 !data/models/.gitkeep
+# Exclude large EVTX files (keep structure)
+data/Sysmon_logs/*.evtx
+data/Master_sysmon/*.evtx
+# Exclude temporary files
+data/processed/**/Untitled*.txt
+data/processed/**/Untitled*.csv
+# Exclude collection logs and status
+data_collection/automation/*.log
+data_collection/automation/collection_status.json
+data_collection/automation/collection.pid
+data_collection/automation/activity_log_*.json
 
 # Jupyter
 .ipynb_checkpoints/

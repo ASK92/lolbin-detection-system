@@ -50,3 +50,10 @@ Write-Host ""
 Write-Host "Recommendation: Export logs periodically to prevent data loss:" -ForegroundColor Cyan
 Write-Host "  wevtutil epl `"$logName`" `"C:\SysmonLogs\SysmonLogs_`$(Get-Date -Format 'yyyyMMdd_HHmmss').evtx`"" -ForegroundColor White
 
+
+
+
+
+
+
+

@@ -3,7 +3,7 @@
 
 [CmdletBinding()]
 param(
-    [string]$AutomationPath = "C:\Automation",
+    [string]$AutomationPath = "C:\Users\adity\lolbin-detection-system\data_collection\automation",
     [string]$SysmonLogPath = "C:\SysmonLogs",
     [int]$ExpectedDays = 5,
     [int]$ExpectedActivitiesPerDay = 1440,  # ~60 activities/hour * 24 hours

@@ -211,3 +211,10 @@ python scripts/train_with_weights.py \
 3. **Collect malicious data** (still needed!)
 4. **Train with weights** for best results
 
+
+
+
+
+
+
+
