@@ -57,3 +57,5 @@ Write-Host "  wevtutil epl `"$logName`" `"C:\SysmonLogs\SysmonLogs_`$(Get-Date -
 
 
 
+
+
