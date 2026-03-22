@@ -1,6 +1,6 @@
 # LOLBin Detection and Explanation System
 
-A production-grade, real-time system for detecting Living Off The Land Binary (LOLBin) attacks using machine learning with integrated explainability features.
+A real-time system for detecting Living Off The Land Binary (LOLBin) attacks using machine learning with integrated explainability features.
 
 ## System Architecture
 
